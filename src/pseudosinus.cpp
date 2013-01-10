@@ -1,28 +1,30 @@
 #include <stdlib.h>
 #include <wirish/wirish.h>
+#include "./libraries/Servo/Servo.h"
 
-int servo = 27;
+
 int i;
 int supahcounter;
 int dir;
-HardwareTimer timer(1);
 int duty;
+Servo servo1;
+Servo servo2;
 
 void setup() {
-	timer.setPrescaleFactor(24);
-	timer.setOverflow(60000);
-	timer.refresh();
-	timer.resume();
-    pinMode(servo, PWM);
-    supahcounter = 2100;
-    dir = 100;
-}
+	pinMode(26, PWM);
+    pinMode(27, PWM);
+    servo1.attach(27);
+	servo2.attach(26);
+	supahcounter = 1;
+	dir = 1;
+	}
 void loop() {
 	supahcounter += dir;
-	if(supahcounter == 2000 || supahcounter == 7300)
+	if(supahcounter == 0 || supahcounter == 180)
 		dir *= -1;
-	timer.setCompare(1, supahcounter);
-	delay(50);
+	servo1.write(supahcounter);
+	servo2.write(180-supahcounter);
+	delay(10);
 }
 
 __attribute__((constructor)) void premain() {

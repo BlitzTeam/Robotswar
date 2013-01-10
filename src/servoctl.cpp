@@ -1,22 +1,34 @@
 #include <stdlib.h>
 #include <wirish/wirish.h>
 
-int servo = 27;
-int servo2 = 26;
+typedef struct
+{
+	int pinid;
+	int chan;
+	HardwareTimer* timer;
+}t_motor;
+
 char* buf;
 char* buf2;
 int i;
-HardwareTimer timer(1);
+HardwareTimer timer1(1);
 int duty;
 int chan;
+t_motor servo, servo2;
+servo.pinid = 27;
+servo.chan = 1;
+servo.timer = &timer1;
+servo2.pinid = 26;
+servo2.chan = 2;
+servo2.timer = &timer1;
 
 void setup() {
-	timer.setPrescaleFactor(24);
-	timer.setOverflow(60000);
-	timer.refresh();
-	timer.resume();
-    pinMode(servo, PWM);
-    pinMode(servo2, PWM);
+	timer1.setPrescaleFactor(24);
+	timer1.setOverflow(60000);
+	timer1.refresh();
+	timer1.resume();
+    pinMode(servo.pinid, PWM);
+    pinMode(servo2.pinid, PWM);
     buf = (char*)malloc(8);
     buf2 = (char*)malloc(2);
 }
@@ -51,7 +63,7 @@ void loop() {
 	}
 	else
 	{
-		timer.setCompare(chan, duty);
+		timer1.setCompare(chan, duty);
 		SerialUSB.print("Duty of motor ");
 		SerialUSB.print(chan);
 		SerialUSB.print(" set to ");
@@ -70,6 +82,7 @@ int main(void) {
     while (true) {
         loop();
     }
-
+	free(buf);
+	free(buf2);
     return 0;
 }

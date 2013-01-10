@@ -1,24 +1,24 @@
 #include <stdlib.h>
 #include <wirish/wirish.h>
+#include "./libraries/Servo/Servo.h"
 
-int servo = 27;
-int servo2 = 26;
 char* buf;
 char* buf2;
 int i;
-HardwareTimer timer(1);
 int duty;
 int chan;
+Servo servo1;
+Servo servo2;
 
 void setup() {
-	timer.setPrescaleFactor(24);
-	timer.setOverflow(60000);
-	timer.refresh();
-	timer.resume();
-    pinMode(servo, PWM);
-    pinMode(servo2, PWM);
+    pinMode(26, PWM);
+    pinMode(27, PWM);
     buf = (char*)malloc(8);
     buf2 = (char*)malloc(2);
+    servo1.attach(27);
+	servo2.attach(26);
+	servo1.write(90);
+	servo2.write(90);
 }
 
 void loop() {
@@ -36,28 +36,15 @@ void loop() {
 	buf2[1] = '\0';
 	chan = atoi(buf2);
 	duty = atoi(buf+2);
-	if(duty != -1)
-	{
-		duty *= 0.52;
-		duty += 2000;
-	}
-	else
-		duty = 0;
-	if((duty < 2000 && duty) || duty > 7200)
-	{
-		SerialUSB.print("Value ");
-		SerialUSB.print(duty);
-		SerialUSB.println(" out of bounds !");
-	}
-	else
-	{
-		timer.setCompare(chan, duty);
-		SerialUSB.print("Duty of motor ");
-		SerialUSB.print(chan);
-		SerialUSB.print(" set to ");
-		SerialUSB.print(duty);
-		SerialUSB.println(" !");
-	}
+	if(chan == 1)
+		servo1.write(duty);
+	if(chan == 2)
+		servo2.write(duty);
+	SerialUSB.print("Angle of motor ");
+	SerialUSB.print(chan);
+	SerialUSB.print(" set to ");
+	SerialUSB.print(duty);
+	SerialUSB.println(" !");
 }
 
 __attribute__((constructor)) void premain() {
