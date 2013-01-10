@@ -70,7 +70,6 @@ int main(void) {
     while (true) {
         loop();
     }
-	free(buf);
-	free(buf2);
+
     return 0;
 }
