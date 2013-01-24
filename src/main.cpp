@@ -1,24 +1,21 @@
 #include <stdlib.h>
 #include <wirish/wirish.h>
-#include "./libraries/Servo/Servo.h"
+#include "./RobotModel/ServoController.h"
 
-char* buf;
-char* buf2;
+char buf[3];
+char buf2[2];
 int i;
 int duty;
 int chan;
-Servo servo1;
-Servo servo2;
+ServoController servo[2];
 
 void setup() {
-    pinMode(26, PWM);
-    pinMode(27, PWM);
-    buf = (char*)malloc(8);
-    buf2 = (char*)malloc(2);
-    servo1.attach(27);
-	servo2.attach(26);
-	servo1.write(90);
-	servo2.write(90);
+    pinMode(15, PWM);
+    pinMode(16, PWM);
+    servo[0].attach(15);
+	servo[1].attach(16);
+	servo[0].init();
+	servo[1].init();
 }
 
 void loop() {
@@ -26,26 +23,26 @@ void loop() {
 	do
 	{
 		buf[i] = SerialUSB.read();
-		SerialUSB.write(buf[i]);
+		//SerialUSB.write(buf[i]);
 		i++;
  	}
- 	while(buf[i-1] != 13);
- 	SerialUSB.println();
-	buf[i-1]='\0';
-	buf2[0] = buf[0];
-	buf2[1] = '\0';
-	chan = atoi(buf2);
-	duty = atoi(buf+2);
-	if(chan == 1)
-		servo1.write(duty);
-	if(chan == 2)
-		servo2.write(duty);
-	SerialUSB.print("Angle of motor ");
-	SerialUSB.print(chan);
-	SerialUSB.print(" set to ");
-	SerialUSB.print(duty);
-	SerialUSB.println(" !");
-}
+ 	while(buf[i-1] != 13 && i <= 3); //on attend un retour chariot;
+ 	
+ 	for(int i=0;i<2;i++)
+ 	{
+		buf2[0] = buf[i];
+		servo[i].changeAngle((atoi(buf2)-1)*2);
+		//SerialUSB.print("[DEF] Angle of motor ");
+		//SerialUSB.print(i);
+		//SerialUSB.print("set to");
+		//SerialUSB.print(atoi(buf2));
+		
+	}
+	
+	//SerialUSB.print("Angle of motor ");
+
+ 	
+ }	
 
 __attribute__((constructor)) void premain() {
     init();
