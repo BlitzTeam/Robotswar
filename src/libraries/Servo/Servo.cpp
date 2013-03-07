@@ -123,7 +123,11 @@ void Servo::writeMicroseconds(uint16 pulseWidth) {
         ASSERT(0);
         return;
     }
-
+	if(pulseWidth == 0)
+	{
+		pwmWrite(this->pin, 0);
+		return;
+	}
     pulseWidth = constrain(pulseWidth, this->minPW, this->maxPW);
     pwmWrite(this->pin, US_TO_COMPARE(pulseWidth));
 }
@@ -147,4 +151,14 @@ void Servo::resetFields(void) {
     this->maxAngle = SERVO_DEFAULT_MAX_ANGLE;
     this->minPW = SERVO_DEFAULT_MIN_PW;
     this->maxPW = SERVO_DEFAULT_MAX_PW;
+}
+
+int16 Servo::getminAngle()
+{
+	return this->minAngle;
+}
+
+int16 Servo::getmaxAngle()
+{
+	return this->maxAngle;
 }

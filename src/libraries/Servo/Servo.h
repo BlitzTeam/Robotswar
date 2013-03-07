@@ -182,7 +182,10 @@ public:
      * @see Servo::attach()
      */
     uint16 readMicroseconds() const;
-
+    
+	int16 getminAngle();	
+	int16 getmaxAngle();
+	
 private:
     int16 pin;
     uint16 minPW;
