@@ -3,13 +3,17 @@
 #include <servos.h>
 #include <terminal.h>
 
-#define SERVO_AG 0
-#define SERVO_AD 1
+#define SERVO_ARG 0
+#define SERVO_ARD 1
+#define SERVO_PTD 2
+#define SERVO_AVD 3
+
 
 volatile bool flag = false;
 volatile bool isUSB = false;
-volatile bool cmdrunning = false;
 volatile int counter = 0;
+volatile int sinusing;
+volatile int sinuspos, sinusdir;
 
 /**
  * Example counter, incremented @50hz
@@ -38,26 +42,26 @@ TERMINAL_COMMAND(switchcom, "Switch between USB and WiFI")
 
 TERMINAL_COMMAND(dance, "BOOGIE WONDERLAND !") //Marche pas :(
 {
-	servos_set_pos(SERVO_AD, 90);
-	servos_set_pos(SERVO_AG, 90);
+	servos_command(SERVO_ARD, 90);
+	servos_command(SERVO_ARG, 90);
 	delay_us(1000000);
-	servos_set_pos(SERVO_AD, 80);
-	servos_set_pos(SERVO_AG, 80);
+	servos_command(SERVO_ARD, 80);
+	servos_command(SERVO_ARG, 80);
 	delay_us(300000);
-	servos_set_pos(SERVO_AD, 70);
-	servos_set_pos(SERVO_AG, 70);
+	servos_command(SERVO_ARD, 70);
+	servos_command(SERVO_ARG, 70);
 	delay_us(300000);
-	servos_set_pos(SERVO_AD, 60);
-	servos_set_pos(SERVO_AG, 60);
+	servos_command(SERVO_ARD, 60);
+	servos_command(SERVO_ARG, 60);
 	delay_us(300000);
-	servos_set_pos(SERVO_AD, 50);
-	servos_set_pos(SERVO_AG, 50);
+	servos_command(SERVO_ARD, 50);
+	servos_command(SERVO_ARG, 50);
 	delay_us(300000);
-	servos_set_pos(SERVO_AD, 40);
-	servos_set_pos(SERVO_AG, 40);
+	servos_command(SERVO_ARD, 40);
+	servos_command(SERVO_ARG, 40);
 	delay_us(300000);
-	servos_set_pos(SERVO_AD, 30);
-	servos_set_pos(SERVO_AG, 30);
+	servos_command(SERVO_ARD, 30);
+	servos_command(SERVO_ARG, 30);
 	delay_us(300000);
 }
 
@@ -68,16 +72,14 @@ TERMINAL_COMMAND(sinus, "Sinus on a servo")
 		terminal_io()->println("Usage : sinus <servo>");
 		return;
 	}
-	cmdrunning = true;
-	int pos=-90, dir=1;
-	while(cmdrunning)
-	{
-		pos+=dir;
-		if(pos == -90 || pos == 90)
-			dir*=-1;
-		servos_set_pos(servos_index(argv[0]), pos);
-		delay_us(10000);
-	}
+	sinusing = servos_index(argv[0]);
+	sinuspos=-90;
+	sinusdir=1;
+}
+
+TERMINAL_COMMAND(sinustop, "Stops the sinus")
+{
+	sinusing = -1;
 }
 	
 /**
@@ -86,8 +88,14 @@ TERMINAL_COMMAND(sinus, "Sinus on a servo")
 void tick()
 {
     counter++;
-    if(Serial3.available())
-    	cmdrunning = false;
+    if(sinusing != -1)
+	{
+		sinuspos+=sinusdir;
+		if(sinuspos == -90 || sinuspos == 90)
+			sinusdir*=-1;
+		servos_command(sinusing, sinuspos);
+		delay_us(10000);
+	}
 }
 
 /**
@@ -112,10 +120,16 @@ void setup()
     
     //Attach the 50Hz interrupt
     servos_attach_interrupt(setFlag);
-    servos_register(3, "AG");
+
+    servos_register(3, "ARG");
 	servos_calibrate(0, 2640, 3514, 5710, false);
-	servos_register(5, "AD");
+	servos_register(5, "ARD");
 	servos_calibrate(1, 3720, 5801, 6855, false);
+	servos_register(27, "PTD");
+	servos_calibrate(2, 2280, 4804, 7304, false);
+	servos_register(26, "AVD");
+	servos_calibrate(3, 1920, 3477, 6414, false);
+	sinusing = -1;
 }
 
 /**
