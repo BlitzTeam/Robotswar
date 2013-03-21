@@ -47,7 +47,7 @@ TERMINAL_COMMAND(switchcom, "Switch between USB and WiFI")
 
 TERMINAL_COMMAND(dance, "BOOGIE WONDERLAND !")
 {
-	
+	plat();
 }
 
 TERMINAL_COMMAND(sinus, "Sinus on a servo")
