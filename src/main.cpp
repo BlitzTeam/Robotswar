@@ -1,4 +1,3 @@
-
 #include <cstdlib>
 #include <wirish/wirish.h>
 #include <servos.h>
@@ -72,6 +71,25 @@ TERMINAL_COMMAND(pompes, "Le robot fait des pompes !")
 TERMINAL_COMMAND(pompes_avant, "Le robot fait des VRAIES pompes !")
 {
 	pompes_avant();
+}
+
+TERMINAL_COMMAND(testSmooth, "Test Smooth move")
+{
+	servos_command(SERVO_AVD, 60);
+	delay_us(1000000);
+	servos_command_time(SERVO_AVD, -60, 500);
+	delay_us(1000000);
+	servos_command(SERVO_AVD, 60);
+	delay_us(1000000);
+	servos_command_time(SERVO_AVD, -60, 1000);
+	delay_us(1000000);
+	servos_command(SERVO_AVD, 60);
+	delay_us(1000000);
+	servos_command_time(SERVO_AVD, -60, 2000);
+	delay_us(1000000);
+	servos_command(SERVO_AVD, 60);
+	delay_us(1000000);
+	servos_command_time(SERVO_AVD, -60, 4000);
 }
 	
 /**

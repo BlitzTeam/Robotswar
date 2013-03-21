@@ -13,7 +13,7 @@ void plat()
 
 void servos_command_time(uint8_t index, float pos,int timeMilliSeconds)
 {
-	float currentPos =	servos_get_pos(index);
+	float currentPos =	servos_get_command(index);
 	float deltaPos = currentPos - pos;
 	uint8_t signe = (deltaPos > 0 ? 1:-1);
 	int wait = timeMilliSeconds / deltaPos;
@@ -22,8 +22,10 @@ void servos_command_time(uint8_t index, float pos,int timeMilliSeconds)
 	while(deltaPos > 0)
 	{
 		servos_command(index,currentPos += signe);
-		sleep(wait);
+		delay_us(wait*2000);
+		deltaPos--;
 	}
+}
 
 void debout()
 {
@@ -69,3 +71,4 @@ void pompes_avant()
 	plat();
 	delay_us(1000000);
 	pushup();
+}
