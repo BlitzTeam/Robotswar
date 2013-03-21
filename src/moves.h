@@ -2,7 +2,6 @@
 #define _MOVES_H_
 
 #include <servos.h>
-#include <terminal.h>
 
 #define SERVO_ARG 0
 #define SERVO_ARD 1

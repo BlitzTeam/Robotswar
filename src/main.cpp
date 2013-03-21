@@ -5,14 +5,6 @@
 #include <terminal.h>
 #include "moves.h"
 
-#define SERVO_ARG 0
-#define SERVO_ARD 1
-#define SERVO_PTD 2
-#define SERVO_AVD 3
-#define SERVO_PTG 4
-#define SERVO_AVG 5
-
-
 volatile bool flag = false;
 volatile bool isUSB = false;
 volatile int counter = 0;
