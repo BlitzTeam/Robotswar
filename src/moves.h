@@ -12,5 +12,6 @@
 #define SERVO_AVG 5
 
 void plat();
+void servos_command_time(uint8_t index, float pos,int timeMilliSeconds);
 
  #endif
