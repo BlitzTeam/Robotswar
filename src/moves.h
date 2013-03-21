@@ -11,5 +11,8 @@
 #define SERVO_AVG 5
 
 void plat();
+void debout();
+void pompes();
+void pompes_avant();
 
  #endif
