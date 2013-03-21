@@ -1,12 +1,16 @@
+
 #include <cstdlib>
 #include <wirish/wirish.h>
 #include <servos.h>
 #include <terminal.h>
+#include "moves.h"
 
 #define SERVO_ARG 0
 #define SERVO_ARD 1
 #define SERVO_PTD 2
 #define SERVO_AVD 3
+#define SERVO_PTG 4
+#define SERVO_AVG 5
 
 
 volatile bool flag = false;
@@ -18,6 +22,7 @@ volatile int sinuspos, sinusdir;
 /**
  * Example counter, incremented @50hz
  */
+
 TERMINAL_COMMAND(counter, "See the counter")
 {
     terminal_io()->print("Counter: ");
@@ -40,29 +45,9 @@ TERMINAL_COMMAND(switchcom, "Switch between USB and WiFI")
 	}
 }
 
-TERMINAL_COMMAND(dance, "BOOGIE WONDERLAND !") //Marche pas :(
+TERMINAL_COMMAND(dance, "BOOGIE WONDERLAND !")
 {
-	servos_command(SERVO_ARD, 90);
-	servos_command(SERVO_ARG, 90);
-	delay_us(1000000);
-	servos_command(SERVO_ARD, 80);
-	servos_command(SERVO_ARG, 80);
-	delay_us(300000);
-	servos_command(SERVO_ARD, 70);
-	servos_command(SERVO_ARG, 70);
-	delay_us(300000);
-	servos_command(SERVO_ARD, 60);
-	servos_command(SERVO_ARG, 60);
-	delay_us(300000);
-	servos_command(SERVO_ARD, 50);
-	servos_command(SERVO_ARG, 50);
-	delay_us(300000);
-	servos_command(SERVO_ARD, 40);
-	servos_command(SERVO_ARG, 40);
-	delay_us(300000);
-	servos_command(SERVO_ARD, 30);
-	servos_command(SERVO_ARG, 30);
-	delay_us(300000);
+	
 }
 
 TERMINAL_COMMAND(sinus, "Sinus on a servo")
@@ -80,6 +65,11 @@ TERMINAL_COMMAND(sinus, "Sinus on a servo")
 TERMINAL_COMMAND(sinustop, "Stops the sinus")
 {
 	sinusing = -1;
+}
+
+TERMINAL_COMMAND(plat, "Aplatit le robot")
+{
+	plat();
 }
 	
 /**
@@ -129,6 +119,11 @@ void setup()
 	servos_calibrate(2, 2280, 4804, 7304, false);
 	servos_register(26, "AVD");
 	servos_calibrate(3, 1920, 3477, 6414, false);
+	servos_register(9, "PTG");
+	servos_calibrate(4, 1560, 4250, 7136, false);
+	servos_register(10, "AVG");
+	servos_calibrate(5, 2280, 5704, 7304, false);
+
 	sinusing = -1;
 }
 
