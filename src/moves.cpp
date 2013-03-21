@@ -25,4 +25,47 @@ void servos_command_time(uint8_t index, float pos,int timeMilliSeconds)
 		sleep(wait);
 	}
 
+void debout()
+{
+	servos_reset(SERVO_ARG);
+	servos_reset(SERVO_ARD);
+	servos_reset(SERVO_PTG);
+	servos_reset(SERVO_PTD);
+	servos_reset(SERVO_AVG);
+	servos_reset(SERVO_AVD);
 }
+
+void pushup()
+{
+	servos_reset(SERVO_AVG);
+	servos_reset(SERVO_AVD);
+}
+
+void pompes()
+{
+	plat();
+	delay_us(1000000);
+	debout();
+	delay_us(1000000);
+	plat();
+	delay_us(1000000);
+	debout();
+	delay_us(1000000);
+	plat();
+	delay_us(1000000);
+	debout();
+}
+
+void pompes_avant()
+{
+	plat();
+	delay_us(1000000);
+	pushup();
+	delay_us(1000000);
+	plat();
+	delay_us(1000000);
+	pushup();
+	delay_us(1000000);
+	plat();
+	delay_us(1000000);
+	pushup();

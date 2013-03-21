@@ -5,16 +5,8 @@
 #include <terminal.h>
 #include "moves.h"
 
-#define SERVO_ARG 0
-#define SERVO_ARD 1
-#define SERVO_PTD 2
-#define SERVO_AVD 3
-#define SERVO_PTG 4
-#define SERVO_AVG 5
-
-
 volatile bool flag = false;
-volatile bool isUSB = false;
+volatile bool isUSB = true;
 volatile int counter = 0;
 volatile int sinusing;
 volatile int sinuspos, sinusdir;
@@ -71,6 +63,16 @@ TERMINAL_COMMAND(plat, "Aplatit le robot")
 {
 	plat();
 }
+
+TERMINAL_COMMAND(pompes, "Le robot fait des pompes !")
+{
+	pompes();
+}
+
+TERMINAL_COMMAND(pompes_avant, "Le robot fait des VRAIES pompes !")
+{
+	pompes_avant();
+}
 	
 /**
  * Function called @50Hz
@@ -106,15 +108,18 @@ void setup()
     
     //Begining on WiFly Mode
     Serial3.begin(115200);
-    terminal_init(&Serial3);
+
+    //...or not (temp)
+    terminal_init(&SerialUSB);
+    //terminal_init(&Serial3);
     
     //Attach the 50Hz interrupt
     servos_attach_interrupt(setFlag);
 
     servos_register(3, "ARG");
-	servos_calibrate(0, 2640, 3514, 5710, false);
+	servos_calibrate(0, 1920, 3514, 5710, false);
 	servos_register(5, "ARD");
-	servos_calibrate(1, 3720, 5801, 6855, false);
+	servos_calibrate(1, 3720, 5801, 7500, false);
 	servos_register(27, "PTD");
 	servos_calibrate(2, 2280, 4804, 7304, false);
 	servos_register(26, "AVD");

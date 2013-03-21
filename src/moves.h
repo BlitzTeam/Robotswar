@@ -2,7 +2,6 @@
 #define _MOVES_H_
 
 #include <servos.h>
-#include <terminal.h>
 
 #define SERVO_ARG 0
 #define SERVO_ARD 1
@@ -13,5 +12,9 @@
 
 void plat();
 void servos_command_time(uint8_t index, float pos,int timeMilliSeconds);
+void debout();
+void pompes();
+void pompes_avant();
+
 
  #endif
