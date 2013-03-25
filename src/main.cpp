@@ -41,6 +41,12 @@ TERMINAL_COMMAND(dance, "BOOGIE WONDERLAND !")
 	plat();
 }
 
+TERMINAL_COMMAND(demo, "Do the harlem moves !")
+{
+	plat();
+	pompes_avant();
+}
+
 TERMINAL_COMMAND(sinus, "Sinus on a servo")
 {
 	if(argc != 1)
