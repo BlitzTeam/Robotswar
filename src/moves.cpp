@@ -7,8 +7,8 @@ void plat()
 	servos_command(SERVO_ARD, 90);
 	servos_command(SERVO_PTG, 0);
 	servos_command(SERVO_PTD, 0);
-	servos_command(SERVO_AVG, 90);
-	servos_command(SERVO_AVD, -90);
+	servos_command(SERVO_AVG, 70);
+	servos_command(SERVO_AVD, -70);
 }
 
 void servos_command_time(uint8_t index, float pos,int timeMilliSeconds)
@@ -39,8 +39,15 @@ void debout()
 
 void pushup()
 {
-	servos_reset(SERVO_AVG);
-	servos_reset(SERVO_AVD);
+	int i;
+	for(i = -70; i<30; i++)
+	{
+		servos_command(SERVO_AVG, i*(-1));
+		servos_command(SERVO_AVD, i);
+		delay_us(100000);
+	}
+	servos_command(SERVO_AVG, -30);
+	servos_command(SERVO_AVD, 30);
 }
 
 void pompes()
@@ -61,14 +68,14 @@ void pompes()
 void pompes_avant()
 {
 	plat();
-	delay_us(1000000);
+	delay_us(500000);
 	pushup();
-	delay_us(1000000);
+	delay_us(500000);
 	plat();
-	delay_us(1000000);
+	delay_us(500000);
 	pushup();
-	delay_us(1000000);
+	delay_us(500000);
 	plat();
-	delay_us(1000000);
+	delay_us(500000);
 	pushup();
 }
