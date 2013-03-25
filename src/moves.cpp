@@ -1,6 +1,7 @@
 #include "moves.h"
 #include <math.h>
 
+
 void plat()
 {
 	servos_command(SERVO_ARG, -90);
@@ -46,29 +47,59 @@ void pushup()
 void pompes()
 {
 	plat();
-	delay_us(1000000);
+	delay_us(SECONDE);
 	debout();
-	delay_us(1000000);
+	delay_us(SECONDE);
 	plat();
-	delay_us(1000000);
+	delay_us(SECONDE);
 	debout();
-	delay_us(1000000);
+	delay_us(SECONDE);
 	plat();
-	delay_us(1000000);
+	delay_us(SECONDE);
 	debout();
+}
+
+void wave_droit()
+{
+	servos_command(SERVO_PTD, 50);
+	delay_us(SECONDE);
+	for (int i = 0 ; i < 4)
+	{
+		servos_command(SERVO_AVD,-60);
+		delay_us(SECONDE/2);
+		servos_command(SERVO_AVD,-90);
+		delay_us(SECONDE/2);
+	}
+	delay_us(SECONDE);
+	servos_command(SERVO_PTD,0);
+}
+
+void wave_gauche()
+{
+	servos_command(SERVO_PTG, -50);
+	delay_us(SECONDE);
+	for (int i = 0 ; i < 4)
+	{
+		servos_command(SERVO_AVG,60);
+		delay_us(SECONDE/2);
+		servos_command(SERVO_AVG,90);
+		delay_us(SECONDE/2);
+	}
+	delay_us(SECONDE);
+	servos_command(SERVO_PTG,0);
 }
 
 void pompes_avant()
 {
 	plat();
-	delay_us(1000000);
+	delay_us(SECONDE);
 	pushup();
-	delay_us(1000000);
+	delay_us(SECONDE);
 	plat();
-	delay_us(1000000);
+	delay_us(SECONDE);
 	pushup();
-	delay_us(1000000);
+	delay_us(SECONDE);
 	plat();
-	delay_us(1000000);
+	delay_us(SECONDE);
 	pushup();
 }
