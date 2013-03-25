@@ -2,13 +2,19 @@
 #include <wirish/wirish.h>
 #include <servos.h>
 #include <terminal.h>
+#include <spline.h>
 #include "moves.h"
+
+
 
 volatile bool flag = false;
 volatile bool isUSB = true;
 volatile int counter = 0;
-volatile int sinusing;
-volatile int sinuspos, sinusdir;
+
+
+Spline spSinus;
+
+bool sinusing[SERVOS_MAX_NB];
 
 /**
  * Example counter, incremented @50hz
@@ -64,14 +70,14 @@ TERMINAL_COMMAND(sinus, "Sinus on a servo")
 		terminal_io()->println("Usage : sinus <servo>");
 		return;
 	}
-	sinusing = servos_index(argv[0]);
-	sinuspos=-90;
-	sinusdir=1;
+	int id = servos_index(argv[0]);
+	sinusing[id] = !sinusing[id];
+
 }
 
 TERMINAL_COMMAND(sinustop, "Stops the sinus")
 {
-	sinusing = -1;
+	//sinusing = -1;
 }
 
 TERMINAL_COMMAND(plat, "Aplatit le robot")
@@ -87,6 +93,15 @@ TERMINAL_COMMAND(pompes, "Le robot fait des pompes !")
 TERMINAL_COMMAND(pompes_avant, "Le robot fait des VRAIES pompes !")
 {
 	pompes_avant();
+}
+
+TERMINAL_COMMAND(gogotwist, "Do the twist")
+{
+	twist();
+	twist();
+	twist();
+	twist();
+	twist();
 }
 
 TERMINAL_COMMAND(testSmooth, "Test Smooth move")
@@ -114,14 +129,15 @@ TERMINAL_COMMAND(testSmooth, "Test Smooth move")
 void tick()
 {
     counter++;
-    if(sinusing != -1)
-	{
-		sinuspos+=sinusdir;
-		if(sinuspos == -90 || sinuspos == 90)
-			sinusdir*=-1;
-		servos_command(sinusing, sinuspos);
-		delay_us(10000);
-	}
+    int i;
+    for(i=0;i<SERVOS_MAX_NB;i++)
+		if(sinusing[i])
+		{
+		/*if(sinuspos == -90 || sinuspos == 90)
+			sinusdir*=-1;*/
+			int sinuspos = spSinus.get((counter%1000)*1.0);
+			servos_command(i, sinuspos);
+		}
 }
 
 /**
@@ -163,7 +179,14 @@ void setup()
 	servos_register(10, "AVG");
 	servos_calibrate(5, 2280, 5704, 7304, false);
 
-	sinusing = -1;
+	int i;
+	for(i=0;i<SERVOS_MAX_NB;i++)
+		sinusing[i] = false;
+
+	spSinus.addPoint(0.0,0.0);
+	spSinus.addPoint(250.0,60.0);
+	spSinus.addPoint(750.0,-60);
+	spSinus.addPoint(1000,0.0);
 }
 
 /**

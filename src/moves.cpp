@@ -45,7 +45,7 @@ void pushup()
 	{
 		servos_command(SERVO_AVG, i*(-1));
 		servos_command(SERVO_AVD, i);
-		delay_us(100000);
+		delay_us(50000);
 	}
 	servos_command(SERVO_AVG, -30);
 	servos_command(SERVO_AVD, 30);
@@ -70,11 +70,11 @@ void wave_droit()
 {
 	servos_command(SERVO_PTD, 50);
 	delay_us(SECONDE);
-	for (int i = 0 ; i < 4)
+	for (int i = 0 ; i < 4;i++)
 	{
 		servos_command(SERVO_AVD,-60);
 		delay_us(SECONDE/2);
-		servos_command(SERVO_AVD,-90);
+		servos_command(SERVO_AVD,-30);
 		delay_us(SECONDE/2);
 	}
 	delay_us(SECONDE);
@@ -85,12 +85,12 @@ void wave_gauche()
 {
 	servos_command(SERVO_PTG, -50);
 	delay_us(SECONDE);
-	for (int i = 0 ; i < 4)
+	for (int i = 0 ; i < 4; i++)
 	{
 		servos_command(SERVO_AVG,60);
 		delay_us(SECONDE/2);
-		servos_command(SERVO_AVG,90);
-		delay_us(SECONDE/2);
+		servos_command(SERVO_AVG,30);
+		delay_us(SECONDE/2);		
 	}
 	delay_us(SECONDE);
 	servos_command(SERVO_PTG,0);
@@ -99,14 +99,33 @@ void wave_gauche()
 void pompes_avant()
 {
 	plat();
-	delay_us(SECONDE*5);
+	delay_us(SECONDE/2);
 	pushup();
-	delay_us(SECONDE*5);
+	delay_us(SECONDE/2);
 	plat();
-	delay_us(SECONDE*5);
+	delay_us(SECONDE/2);
 	pushup();
-	delay_us(SECONDE*5);
+	delay_us(SECONDE/2);
 	plat();
-	delay_us(SECONDE*5);
+	delay_us(SECONDE/2);
 	pushup();
+}
+
+
+
+void twist()
+{
+	debout();
+	servos_command(SERVO_PTD, -50);
+	servos_command(SERVO_PTG, 50);
+	int i;
+	for(i = -50;i < 10;i++)
+	{
+		servos_command(SERVO_AVD, i);
+		servos_command(SERVO_AVG, i*(-1));
+		delay_us(10000);
+	}
+	delay_us(SECONDE*0.2);
+	debout();
+	delay_us(SECONDE*0.5);
 }

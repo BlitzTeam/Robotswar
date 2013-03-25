@@ -18,6 +18,6 @@ void pompes();
 void pompes_avant();
 void wave_droit();
 void wave_gauche();
-
+void twist();
 
  #endif
