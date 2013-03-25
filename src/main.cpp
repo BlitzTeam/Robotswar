@@ -39,6 +39,16 @@ TERMINAL_COMMAND(switchcom, "Switch between USB and WiFI")
 TERMINAL_COMMAND(dance, "BOOGIE WONDERLAND !")
 {
 	plat();
+	delay_us(1000000);
+	debout();
+	delay_us(1000000);
+	wave_droit();
+	delay_us(1000000);
+	debout();
+	delay_us(1000000);
+	wave_gauche();
+	delay_us(1000000);
+	debout();
 }
 
 TERMINAL_COMMAND(demo, "Do the harlem moves !")

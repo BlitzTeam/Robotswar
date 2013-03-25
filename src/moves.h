@@ -9,7 +9,7 @@
 #define SERVO_AVD 3
 #define SERVO_PTG 4
 #define SERVO_AVG 5
-#define SECONDE 100000
+#define SECONDE 1000000
 
 void plat();
 void servos_command_time(uint8_t index, float pos,int timeMilliSeconds);
