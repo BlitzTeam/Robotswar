@@ -138,6 +138,7 @@ void tick()
 			int sinuspos = spSinus.get((counter%1000)*1.0);
 			servos_command(i, sinuspos);
 		}
+	flag = false;
 }
 
 /**
