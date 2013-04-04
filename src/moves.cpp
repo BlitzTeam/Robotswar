@@ -1,6 +1,40 @@
 #include "moves.h"
 #include <math.h>
 
+#include <terminal.h>
+
+Spline * currentMove[SERVOS_MAX_NB]; // exported in moves.h
+static Spline splineSinus;
+
+void move_init()
+{
+	int i;
+	for(i=0;i<SERVOS_MAX_NB;i++)
+		currentMove[i] = NULL;
+
+	splineSinus.addPoint(0.0*SPLINE_SINUS_TEMPO,0.0);
+	splineSinus.addPoint(50.0*SPLINE_SINUS_TEMPO,60.0);
+	splineSinus.addPoint(150.0*SPLINE_SINUS_TEMPO,-60);
+	splineSinus.addPoint(200.0*SPLINE_SINUS_TEMPO,0.0);
+
+}
+
+void move_sinus(uint8_t index)
+{
+	if(!currentMove[index])
+	{
+		terminal_io()->println("Go Sinus !");
+
+		currentMove[index] = &splineSinus;
+	}
+	else
+	{
+		currentMove[index] = NULL;
+		terminal_io()->println("Stop Sinus !");
+
+	}
+}
+
 
 void plat()
 {
@@ -12,21 +46,7 @@ void plat()
 	servos_command(SERVO_AVD, -70);
 }
 
-void servos_command_time(uint8_t index, float pos,int timeMilliSeconds)
-{
-	float currentPos =	servos_get_command(index);
-	float deltaPos = currentPos - pos;
-	uint8_t signe = (deltaPos > 0 ? 1:-1);
-	int wait = timeMilliSeconds / deltaPos;
-	
-	deltaPos = abs(deltaPos);
-	while(deltaPos > 0)
-	{
-		servos_command(index,currentPos += signe);
-		delay_us(wait*2000);
-		deltaPos--;
-	}
-}
+
 
 void debout()
 {
@@ -128,4 +148,12 @@ void twist()
 	delay_us(SECONDE*0.2);
 	debout();
 	delay_us(SECONDE*0.5);
+}
+
+void move_stop()
+{
+		int i;
+	for(i=0;i<SERVOS_MAX_NB;i++)
+		currentMove[i] = NULL;
+
 }

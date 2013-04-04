@@ -12,9 +12,6 @@ volatile bool isUSB = true;
 volatile int counter = 0;
 
 
-Spline spSinus;
-
-bool sinusing[SERVOS_MAX_NB];
 
 /**
  * Example counter, incremented @50hz
@@ -71,13 +68,13 @@ TERMINAL_COMMAND(sinus, "Sinus on a servo")
 		return;
 	}
 	int id = servos_index(argv[0]);
-	sinusing[id] = !sinusing[id];
+	move_sinus(id);
 
 }
 
-TERMINAL_COMMAND(sinustop, "Stops the sinus")
+TERMINAL_COMMAND(stopmove, "Stops the sinus")
 {
-	//sinusing = -1;
+	move_stop();
 }
 
 TERMINAL_COMMAND(plat, "Aplatit le robot")
@@ -104,25 +101,6 @@ TERMINAL_COMMAND(gogotwist, "Do the twist")
 	twist();
 }
 
-TERMINAL_COMMAND(testSmooth, "Test Smooth move")
-{
-	servos_command(SERVO_AVD, 60);
-	delay_us(1000000);
-	servos_command_time(SERVO_AVD, -60, 500);
-	delay_us(1000000);
-	servos_command(SERVO_AVD, 60);
-	delay_us(1000000);
-	servos_command_time(SERVO_AVD, -60, 1000);
-	delay_us(1000000);
-	servos_command(SERVO_AVD, 60);
-	delay_us(1000000);
-	servos_command_time(SERVO_AVD, -60, 2000);
-	delay_us(1000000);
-	servos_command(SERVO_AVD, 60);
-	delay_us(1000000);
-	servos_command_time(SERVO_AVD, -60, 4000);
-}
-	
 /**
  * Function called @50Hz
  */
@@ -131,12 +109,10 @@ void tick()
     counter++;
     int i;
     for(i=0;i<SERVOS_MAX_NB;i++)
-		if(sinusing[i])
+		if(currentMove[i])
 		{
-		/*if(sinuspos == -90 || sinuspos == 90)
-			sinusdir*=-1;*/
-			int sinuspos = spSinus.get((counter%1000)*1.0);
-			servos_command(i, sinuspos);
+			int pos = currentMove[i]->getMod(counter*1.0);
+			servos_command(i, pos);
 		}
 	flag = false;
 }
@@ -180,14 +156,9 @@ void setup()
 	servos_register(10, "AVG");
 	servos_calibrate(5, 2280, 5704, 7304, false);
 
-	int i;
-	for(i=0;i<SERVOS_MAX_NB;i++)
-		sinusing[i] = false;
+	move_init();
 
-	spSinus.addPoint(0.0,0.0);
-	spSinus.addPoint(250.0,60.0);
-	spSinus.addPoint(750.0,-60);
-	spSinus.addPoint(1000,0.0);
+
 }
 
 /**
