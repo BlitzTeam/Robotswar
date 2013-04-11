@@ -4,6 +4,8 @@
 #include <terminal.h>
 
 Spline * currentMove[SERVOS_MAX_NB]; // exported in moves.h
+char * servosNames[SERVOS_MAX_NB]; //exported in move.h
+
 static Spline splineSinus;
 
 void move_init()

@@ -4,7 +4,12 @@
 #include <terminal.h>
 #include <spline.h>
 #include "moves.h"
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 
+
+#define START_NUM_SERVO 3
 
 
 volatile bool flag = false;
@@ -142,7 +147,7 @@ void setup()
     
     //Attach the 50Hz interrupt
     servos_attach_interrupt(setFlag);
-
+    /*
     servos_register(3, "ARG");
 	servos_calibrate(0, 1920, 3514, 5710, false);
 	servos_register(5, "ARD");
@@ -155,6 +160,8 @@ void setup()
 	servos_calibrate(4, 1560, 4250, 7136, false);
 	servos_register(10, "AVG");
 	servos_calibrate(5, 2280, 5704, 7304, false);
+	*/
+	int i;
 
 	move_init();
 

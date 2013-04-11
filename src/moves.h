@@ -12,7 +12,11 @@
 #define SERVO_AVG 5
 #define SECONDE 1000000
 
+
 #define SPLINE_SINUS_TEMPO 2
+
+
+extern char * servosNames[SERVOS_MAX_NB];
 
 extern Spline * currentMove[SERVOS_MAX_NB]; // declare in moves.c
 
