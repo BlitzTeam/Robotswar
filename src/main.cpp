@@ -59,6 +59,39 @@ TERMINAL_COMMAND(dance, "BOOGIE WONDERLAND !")
 	debout();
 }
 
+TERMINAL_COMMAND(spline_ui, "Create a new Spline. Usage: spline_ui [ServoLabel] [number of points]")
+{
+    if (argc == 2) 
+    {
+        uint8_t i = servos_index(argv[0]);
+        if (i != (uint8_t)-1) 
+        {
+        	int pos;
+        	int pointCounter = 0;
+        	int numberOfPoints(atoi(argv[1]));
+        	Spline spline;
+        	while (pointCounter < numberOfPoints)
+        	{		    	
+		        terminal_bar_init(-90, 90, (int)(servos_get_command(i)));
+		        while (terminal_bar_escaped() == false) 
+		        {
+		            pos = terminal_bar_tick();
+		            servos_command(i, pos);
+		        }
+   
+		        spline.addPoint((double) (pointCounter * 50.0), (double) pos);
+		       	pointCounter++;
+		    }
+		    
+		    currentMove[i] = &spline;
+        } 
+        else 
+            terminal_io()->println("Unknown label");
+    } 
+    else 
+        terminal_io()->println("Bad usage");
+}
+
 TERMINAL_COMMAND(demo, "Do the harlem moves !")
 {
 	plat();
