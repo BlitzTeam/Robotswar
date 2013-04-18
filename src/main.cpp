@@ -44,15 +44,27 @@ TERMINAL_COMMAND(switchcom, "Switch between USB and WiFI")
 	}
 }
 
-TERMINAL_COMMAND(spline_dump, "Dump the current splines")
+TERMINAL_COMMAND(spline_dump, "Dump the current splines on a servomotor. Takes two args")
 {
+
 	for (int i = 0; i < SERVOS_MAX_NB; i++)
 	{
 		if (currentMove[i] != NULL)
 		{
-			for (int j = 0; j < currentMove[i].getPointCount(); j++)
-			terminal_io()->println("currentMove[i].addPoint(%f, %f);", currentMove[i].getPointX(j), currentMove[i].getPointY(j));
+			terminal_io()->print("Static Spline ");
+			terminal_io()->print(argv[1]);
+			terminal_io()->println(";");
+			for (int j = 0; j < currentMove[i]->getPointCount(); j++)
+			{
+				terminal_io()->print(argv[1]);
+				terminal_io()->print("->addPoint(");
+				terminal_io()->print(currentMove[i]->getPointX(j));
+				terminal_io()->print(", ");
+				terminal_io()->print(currentMove[i]->getPointY(j));
+				terminal_io()->println(");");
+			}
 		}
+		
 	}
 }
 
@@ -63,7 +75,7 @@ TERMINAL_COMMAND(spline_ui, "Create a new Spline. Usage: spline_ui [ServoLabel] 
         uint8_t i = servos_index(argv[0]);
         if (i != (uint8_t)-1) 
         {
-        	int pos;
+        	int pos = 0;
         	int pointCounter = 0;
         	int numberOfPoints(atoi(argv[1]));
         	Spline spline;
