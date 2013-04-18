@@ -16,3 +16,8 @@ src/build/*
 *.exe
 *.out
 *.app
+solidWorks/brasArriere.STL
+solidWorks/pantiltDD.STL
+solidWorks/pied.STL
+solidWorks/~$brasArriere.SLDASM
+solidWorks/~$patteArriere.SLDPRT
