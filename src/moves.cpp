@@ -3,19 +3,6 @@
 
 #include <terminal.h>
 
-#define ARG0 0	//11
-#define ARG1 1	//3
-#define ARD0 2	//5
-#define ARD1 3	//8
-#define AVG0 4	//9
-#define AVG1 5	//10
-#define AVG2 6	//16
-#define AVD0 7	//27
-#define AVD1 8	//26
-#define AVD2 9	//25
-#define AVD3 10	//15
-#define CALLE 11//4
-
 Spline * currentMove[SERVOS_MAX_NB]; // exported in moves.h
 char * servosNames[SERVOS_MAX_NB]; //exported in move.h
 
@@ -35,7 +22,7 @@ void move_init()
 	servos_register(25,"AVD2");
 	servos_register(15,"AVD3");
 	servos_register(4,"CALLE");
-	
+
 	int i;
 	for(i=0;i<SERVOS_MAX_NB;i++)
 		currentMove[i] = NULL;
