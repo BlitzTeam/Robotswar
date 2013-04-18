@@ -2,22 +2,26 @@
 #include <wirish/wirish.h>
 #include <servos.h>
 #include <terminal.h>
+#include <spline.h>
+#include "moves.h"
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-#define SERVO_ARG 0
-#define SERVO_ARD 1
-#define SERVO_PTD 2
-#define SERVO_AVD 3
+
+#define START_NUM_SERVO 3
 
 
 volatile bool flag = false;
-volatile bool isUSB = false;
+volatile bool isUSB = true;
 volatile int counter = 0;
-volatile int sinusing;
-volatile int sinuspos, sinusdir;
+
+
 
 /**
  * Example counter, incremented @50hz
  */
+
 TERMINAL_COMMAND(counter, "See the counter")
 {
     terminal_io()->print("Counter: ");
@@ -40,29 +44,58 @@ TERMINAL_COMMAND(switchcom, "Switch between USB and WiFI")
 	}
 }
 
-TERMINAL_COMMAND(dance, "BOOGIE WONDERLAND !") //Marche pas :(
+TERMINAL_COMMAND(dance, "BOOGIE WONDERLAND !")
 {
-	servos_command(SERVO_ARD, 90);
-	servos_command(SERVO_ARG, 90);
+	plat();
 	delay_us(1000000);
-	servos_command(SERVO_ARD, 80);
-	servos_command(SERVO_ARG, 80);
-	delay_us(300000);
-	servos_command(SERVO_ARD, 70);
-	servos_command(SERVO_ARG, 70);
-	delay_us(300000);
-	servos_command(SERVO_ARD, 60);
-	servos_command(SERVO_ARG, 60);
-	delay_us(300000);
-	servos_command(SERVO_ARD, 50);
-	servos_command(SERVO_ARG, 50);
-	delay_us(300000);
-	servos_command(SERVO_ARD, 40);
-	servos_command(SERVO_ARG, 40);
-	delay_us(300000);
-	servos_command(SERVO_ARD, 30);
-	servos_command(SERVO_ARG, 30);
-	delay_us(300000);
+	debout();
+	delay_us(1000000);
+	wave_droit();
+	delay_us(1000000);
+	debout();
+	delay_us(1000000);
+	wave_gauche();
+	delay_us(1000000);
+	debout();
+}
+
+TERMINAL_COMMAND(spline_ui, "Create a new Spline. Usage: spline_ui [ServoLabel] [number of points]")
+{
+    if (argc == 2) 
+    {
+        uint8_t i = servos_index(argv[0]);
+        if (i != (uint8_t)-1) 
+        {
+        	int pos;
+        	int pointCounter = 0;
+        	int numberOfPoints(atoi(argv[1]));
+        	Spline spline;
+        	while (pointCounter < numberOfPoints)
+        	{		    	
+		        terminal_bar_init(-90, 90, (int)(servos_get_command(i)));
+		        while (terminal_bar_escaped() == false) 
+		        {
+		            pos = terminal_bar_tick();
+		            servos_command(i, pos);
+		        }
+   
+		        spline.addPoint((double) (pointCounter * 50.0), (double) pos);
+		       	pointCounter++;
+		    }
+		    
+		    currentMove[i] = &spline;
+        } 
+        else 
+            terminal_io()->println("Unknown label");
+    } 
+    else 
+        terminal_io()->println("Bad usage");
+}
+
+TERMINAL_COMMAND(demo, "Do the harlem moves !")
+{
+	plat();
+	pompes_avant();
 }
 
 TERMINAL_COMMAND(sinus, "Sinus on a servo")
@@ -72,30 +105,54 @@ TERMINAL_COMMAND(sinus, "Sinus on a servo")
 		terminal_io()->println("Usage : sinus <servo>");
 		return;
 	}
-	sinusing = servos_index(argv[0]);
-	sinuspos=-90;
-	sinusdir=1;
+	int id = servos_index(argv[0]);
+	move_sinus(id);
+
 }
 
-TERMINAL_COMMAND(sinustop, "Stops the sinus")
+TERMINAL_COMMAND(stopmove, "Stops the sinus")
 {
-	sinusing = -1;
+	move_stop();
 }
-	
+
+TERMINAL_COMMAND(plat, "Aplatit le robot")
+{
+	plat();
+}
+
+TERMINAL_COMMAND(pompes, "Le robot fait des pompes !")
+{
+	pompes();
+}
+
+TERMINAL_COMMAND(pompes_avant, "Le robot fait des VRAIES pompes !")
+{
+	pompes_avant();
+}
+
+TERMINAL_COMMAND(gogotwist, "Do the twist")
+{
+	twist();
+	twist();
+	twist();
+	twist();
+	twist();
+}
+
 /**
  * Function called @50Hz
  */
 void tick()
 {
     counter++;
-    if(sinusing != -1)
-	{
-		sinuspos+=sinusdir;
-		if(sinuspos == -90 || sinuspos == 90)
-			sinusdir*=-1;
-		servos_command(sinusing, sinuspos);
-		delay_us(10000);
-	}
+    int i;
+    for(i=0;i<SERVOS_MAX_NB;i++)
+		if(currentMove[i])
+		{
+			int pos = currentMove[i]->getMod(counter*1.0);
+			servos_command(i, pos);
+		}
+	flag = false;
 }
 
 /**
@@ -116,20 +173,32 @@ void setup()
     
     //Begining on WiFly Mode
     Serial3.begin(115200);
-    terminal_init(&Serial3);
+
+    //...or not (temp)
+    terminal_init(&SerialUSB);
+    //terminal_init(&Serial3);
     
     //Attach the 50Hz interrupt
     servos_attach_interrupt(setFlag);
-
+    /*
     servos_register(3, "ARG");
-	servos_calibrate(0, 2640, 3514, 5710, false);
+	servos_calibrate(0, 1920, 3514, 5710, false);
 	servos_register(5, "ARD");
-	servos_calibrate(1, 3720, 5801, 6855, false);
+	servos_calibrate(1, 3720, 5801, 7500, false);
 	servos_register(27, "PTD");
 	servos_calibrate(2, 2280, 4804, 7304, false);
 	servos_register(26, "AVD");
 	servos_calibrate(3, 1920, 3477, 6414, false);
-	sinusing = -1;
+	servos_register(9, "PTG");
+	servos_calibrate(4, 1560, 4250, 7136, false);
+	servos_register(10, "AVG");
+	servos_calibrate(5, 2280, 5704, 7304, false);
+	*/
+	int i;
+
+	move_init();
+
+
 }
 
 /**

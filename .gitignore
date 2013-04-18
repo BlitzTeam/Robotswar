@@ -1,6 +1,7 @@
 # Object files
 *.o
 src/build/*
+build/*
 
 # Libraries
 *.lib

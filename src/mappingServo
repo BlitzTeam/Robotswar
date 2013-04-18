@@ -1,0 +1,48 @@
+3 Patte arrière Gauche
+4 Calle
+5 Hanche arrière Droit
+8 Patte arrière Droit
+9 Pantilt gauche
+10 Hanche avant gauche
+11 Hanche arrière gauche
+27 Pantilt avant droit 
+26 Hanche avant droite
+25 Attack
+16 Patte avant Gauche
+15 Patte avant droit 
+
+
+#define SERVO_t8 0
+#define SERVO_t3 1
+#define SERVO_t5 2
+#define SERVO_t9 3
+#define SERVO_t10 4
+#define SERVO_t11 5
+#define SERVO_t27 6
+#define SERVO_t26 7
+#define SERVO_t25 8
+#define SERVO_t16 9
+#define SERVO_t15 10
+servos_register(8, "t8");
+servos_calibrate(0, 1920, 5424, 7056, false);
+servos_register(3, "t3");
+servos_calibrate(1, 1920, 3360, 6735, false);
+servos_register(5, "t5");
+servos_calibrate(2, 3720, 6324, 7140, false);
+servos_register(9, "t9");
+servos_calibrate(3, 2280, 4264, 6990, false);
+servos_register(10, "t10");
+servos_calibrate(4, 2880, 6604, 7108, false);
+servos_register(11, "t11");
+servos_calibrate(5, 1920, 2200, 5451, false);
+servos_register(27, "t27");
+servos_calibrate(6, 2280, 4724, 6990, false);
+servos_register(26, "t26");
+servos_calibrate(7, 1920, 2112, 6735, false);
+servos_register(25, "t25");
+servos_calibrate(8, 1920, 6735, 6735, false);
+servos_register(16, "t16");
+servos_calibrate(9, 2160, 4388, 7216, false);
+servos_register(15, "t15");
+servos_calibrate(10, 2280, 5110, 6990, false);
+

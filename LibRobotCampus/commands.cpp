@@ -31,7 +31,7 @@ TERMINAL_COMMAND(calibrate_ui,
             uint16_t min = 0;
             uint16_t max = SERVOS_TIMERS_OVERFLOW;
             uint16_t init = SERVOS_TIMERS_OVERFLOW/20;
-            servos_calibrate(i, min, init, max, false);
+            servos_calibrate(i, min, init, max, servos_is_reversed(i));
             servos_enable(i, true);
             //Min
             terminal_io()->println("Select min position:");
@@ -56,7 +56,7 @@ TERMINAL_COMMAND(calibrate_ui,
             }
             //Calibrate
             servos_enable(i, false);
-            uint8_t code = servos_calibrate(i, min, init, max, false);
+            uint8_t code = servos_calibrate(i, min, init, max, servos_is_reversed(i));
             if (code == 0) {
                 terminal_io()->println("OK");
             } else {
@@ -322,10 +322,28 @@ TERMINAL_COMMAND(register,
     }
 }
 
+TERMINAL_COMMAND(smooth,
+        "Sets the smoothing")
+{
+    if (argc == 1) {
+        double smooth = atof(argv[0]);
+        servos_set_smoothing(smooth);
+        terminal_io()->println("Smoothing set");
+    }
+}
+
+TERMINAL_COMMAND(mute, "Mute/Unmute the terminal")
+{
+    if (argc == 1) {
+        int mute = atoi(argv[0]);
+        terminal_silent(mute != 0);
+    }
+}
+
 TERMINAL_COMMAND(forward,
         "Go to forward mode, the Serial3 will be forwarded to USB and vice-versa. Usage: forward [baudrate]")
 {
-    int baudrate = 115200;
+    int baudrate = 921600;
     char buffer[512];
     unsigned int pos;
     terminal_io()->print("The forward mode will be enabled, ");
