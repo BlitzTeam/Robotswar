@@ -4,12 +4,18 @@
 #include <servos.h>
 #include <spline.h>
 
-#define SERVO_ARG 0
-#define SERVO_ARD 1
-#define SERVO_PTD 2
-#define SERVO_AVD 3
-#define SERVO_PTG 4
-#define SERVO_AVG 5
+#define ARG0 0	//11
+#define ARG1 1	//3
+#define ARD0 2	//5
+#define ARD1 3	//8
+#define AVG0 4	//9
+#define AVG1 5	//10
+#define AVG2 6	//16
+#define AVD0 7	//27
+#define AVD1 8	//26
+#define AVD2 9	//25
+#define AVD3 10	//15
+#define CALE 11//4
 #define SECONDE 1000000
 
 
