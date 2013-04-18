@@ -28,6 +28,21 @@ void Spline::addPoint(double x, double y)
     }
 }
 
+int Spline::getPointCount()
+{
+    return nbPoints;
+}
+
+double Spline::getPointX(int index)
+{
+    return points[index][0];
+}
+
+double Spline::getPointY(int index)
+{
+    return points[index][1];
+}
+
 double Spline::get(double x)
 {
     int i;

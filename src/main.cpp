@@ -59,6 +59,19 @@ TERMINAL_COMMAND(dance, "BOOGIE WONDERLAND !")
 	debout();
 }
 
+TERMINAL_COMMAND(spline_dump, "Dump the current splines")
+{
+	for (int i = 0; i < SERVOS_MAX_NB; i++)
+	{
+		if (currentMove[i] != NULL)
+		{
+			for (int j = 0; j < currentMove[i].getPointCount(); j++)
+			terminal_io()->println("currentMove[i].addPoint(%f, %f);", currentMove[i].getPointX(j), currentMove[i].getPointY(j));
+		}
+	}
+}
+
+
 TERMINAL_COMMAND(spline_ui, "Create a new Spline. Usage: spline_ui [ServoLabel] [number of points]")
 {
     if (argc == 2) 

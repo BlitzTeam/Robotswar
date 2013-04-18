@@ -13,6 +13,12 @@ class Spline
          */
         void addPoint(double x, double y);
 
+        int getPointCount();
+
+        double getPointX(int index);
+
+        double getPointY(int index);
+
         /**
          * Gets the xMax of the spline
          */
