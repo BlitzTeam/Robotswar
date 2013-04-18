@@ -44,21 +44,6 @@ TERMINAL_COMMAND(switchcom, "Switch between USB and WiFI")
 	}
 }
 
-TERMINAL_COMMAND(dance, "BOOGIE WONDERLAND !")
-{
-	plat();
-	delay_us(1000000);
-	debout();
-	delay_us(1000000);
-	wave_droit();
-	delay_us(1000000);
-	debout();
-	delay_us(1000000);
-	wave_gauche();
-	delay_us(1000000);
-	debout();
-}
-
 TERMINAL_COMMAND(spline_ui, "Create a new Spline. Usage: spline_ui [ServoLabel] [number of points]")
 {
     if (argc == 2) 
@@ -92,12 +77,6 @@ TERMINAL_COMMAND(spline_ui, "Create a new Spline. Usage: spline_ui [ServoLabel] 
         terminal_io()->println("Bad usage");
 }
 
-TERMINAL_COMMAND(demo, "Do the harlem moves !")
-{
-	plat();
-	pompes_avant();
-}
-
 TERMINAL_COMMAND(sinus, "Sinus on a servo")
 {
 	if(argc != 1)
@@ -110,33 +89,9 @@ TERMINAL_COMMAND(sinus, "Sinus on a servo")
 
 }
 
-TERMINAL_COMMAND(stopmove, "Stops the sinus")
+TERMINAL_COMMAND(stopmove, "Stops all the moves")
 {
 	move_stop();
-}
-
-TERMINAL_COMMAND(plat, "Aplatit le robot")
-{
-	plat();
-}
-
-TERMINAL_COMMAND(pompes, "Le robot fait des pompes !")
-{
-	pompes();
-}
-
-TERMINAL_COMMAND(pompes_avant, "Le robot fait des VRAIES pompes !")
-{
-	pompes_avant();
-}
-
-TERMINAL_COMMAND(gogotwist, "Do the twist")
-{
-	twist();
-	twist();
-	twist();
-	twist();
-	twist();
 }
 
 /**
