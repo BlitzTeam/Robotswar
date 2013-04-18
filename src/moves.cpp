@@ -23,6 +23,19 @@ void move_init()
 	servos_register(15,"AVD3");
 	servos_register(4,"CALE");
 
+	servos_calibrate(0, 2280, 2625, 5734, false);
+	servos_calibrate(1, 1560, 3272, 6808, false);
+	servos_calibrate(2, 4080, 6711, 7138, false);
+	servos_calibrate(3, 1920, 5424, 7056, false);
+	servos_calibrate(4, 1920, 4812, 7056, false);
+	servos_calibrate(5, 2280, 6990, 6990, false);
+	servos_calibrate(6, 2280, 3904, 7304, false);
+	servos_calibrate(7, 2280, 4264, 6990, false);
+	servos_calibrate(8, 1920, 1956, 7056, false);
+	servos_calibrate(9, 1920, 5526, 7056, false);
+	servos_calibrate(10, 1920, 7056, 7056, false);
+	servos_calibrate(11, 2640, 2820, 4175, false);
+
 	int i;
 	for(i=0;i<SERVOS_MAX_NB;i++)
 		currentMove[i] = NULL;
