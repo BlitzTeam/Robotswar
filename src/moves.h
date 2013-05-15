@@ -21,6 +21,8 @@
 
 #define SPLINE_SINUS_TEMPO 2
 
+#define SPLINE_TEMPO (0.5)
+
 
 extern char * servosNames[SERVOS_MAX_NB];
 
@@ -38,5 +40,5 @@ void twist();
 void move_init();
 void move_sinus(uint8_t index);
 void move_stop();
-
+void move_go();
  #endif

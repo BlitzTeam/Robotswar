@@ -118,6 +118,12 @@ TERMINAL_COMMAND(stopmove, "Stops all the moves")
 	move_stop();
 }
 
+TERMINAL_COMMAND(testGo, "Test the move of the death/deads")
+{
+	move_go();
+}
+
+
 /**
  * Function called @50Hz
  */
@@ -206,6 +212,9 @@ __attribute__((constructor)) void premain()
 {
     init();
 }
+
+
+
 
 int main(void)
 {

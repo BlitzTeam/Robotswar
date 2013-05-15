@@ -7,6 +7,8 @@ Spline * currentMove[SERVOS_MAX_NB]; // exported in moves.h
 char * servosNames[SERVOS_MAX_NB]; //exported in move.h
 
 static Spline splineSinus;
+static Spline  move[SERVOS_MAX_NB];
+static Spline moveAV1;
 
 void move_init()
 {
@@ -45,6 +47,29 @@ void move_init()
 	splineSinus.addPoint(150.0*SPLINE_SINUS_TEMPO,-60);
 	splineSinus.addPoint(200.0*SPLINE_SINUS_TEMPO,0.0);
 
+	move[AVD1].addPoint(0.0*SPLINE_TEMPO,2);
+	move[AVD1].addPoint(50.0*SPLINE_TEMPO,38);
+	move[AVD1].addPoint(100.0*SPLINE_TEMPO,2);
+
+	move[AVG1].addPoint(0.0*SPLINE_TEMPO,0);
+	move[AVG1].addPoint(50.0*SPLINE_TEMPO,-36);
+	move[AVG1].addPoint(100.0*SPLINE_TEMPO,0);
+
+	move[AVG2].addPoint(0.0*SPLINE_TEMPO,23);
+	move[AVG2].addPoint(50.0*SPLINE_TEMPO,-52);
+	move[AVG2].addPoint(100.0*SPLINE_TEMPO,23);
+
+	move[AVD2].addPoint(0.0*SPLINE_TEMPO,-18);
+	move[AVD2].addPoint(50.0*SPLINE_TEMPO,48);
+	move[AVD2].addPoint(100.0*SPLINE_TEMPO,-18);
+}
+
+void move_go()
+{
+	currentMove[AVD1] = &move[AVD1];
+	currentMove[AVG1] = &move[AVG1];
+	currentMove[AVD2] = &move[AVD2];
+	currentMove[AVG2] = &move[AVG2];
 }
 
 void move_sinus(uint8_t index)

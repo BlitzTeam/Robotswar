@@ -19,6 +19,7 @@ struct terminal_bar_t
  */
 
 static char terminal_buffer[TERMINAL_BUFFER_SIZE];
+static char terminal_history[TERMINAL_BUFFER_SIZE];
 
 static unsigned int terminal_pos = 0;
 
@@ -160,6 +161,8 @@ void terminal_process()
     
     terminalIO.println();
 
+    memcpy(terminal_history,terminal_buffer,terminal_pos);
+
     strtok_r(terminal_buffer, " ", &saveptr);
     while (
         (argv[argc] = strtok_r(NULL, " ", &saveptr)) != NULL && 
@@ -192,6 +195,7 @@ void terminal_init(Serial *serial)
         terminalIO.setIO(serial);
         terminalIO.silent = false;
     }
+    memcpy(terminal_history,"help",5);
     terminal_prompt();
     terminal_bar.escape = true;
 }
@@ -233,6 +237,23 @@ void terminal_tick()
             code[0] = terminalIO.io->read();
             while (!terminalIO.io->available());
             code[1] = terminalIO.io->read();
+            //Key Up
+            if(code[0] == 0x5B && code[1] == 0x41)
+            {
+                memcpy(terminal_buffer,terminal_history,strlen(terminal_history));
+                terminal_pos = strlen(terminal_history);
+                terminal_io()->print("\r");
+                terminal_io()->write(terminal_buffer,terminal_pos);
+
+            }
+            else if(code[0] == 0x5B && code[1] == 0x42)
+            {
+                memcpy(terminal_buffer,"\0",1);
+                terminal_pos = 0;
+                terminal_io()->print("\r");
+                terminal_io()->write(terminal_buffer,terminal_pos);
+            }
+
         //Others
         } else {
             terminal_buffer[terminal_pos] = c;

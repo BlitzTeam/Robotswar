@@ -31,7 +31,7 @@ TERMINAL_COMMAND(calibrate_ui,
             uint16_t min = 0;
             uint16_t max = SERVOS_TIMERS_OVERFLOW;
             uint16_t init = SERVOS_TIMERS_OVERFLOW/20;
-            servos_calibrate(i, min, init, max, servos_is_reversed(i));
+            servos_calibrate(i, min,init, max, servos_is_reversed(i));
             servos_enable(i, true);
             //Min
             terminal_io()->println("Select min position:");
@@ -47,7 +47,7 @@ TERMINAL_COMMAND(calibrate_ui,
                 max = (uint16_t)terminal_bar_tick();
                 servos_set_pos(i, max);
             }
-            //Zero
+            //Init
             terminal_io()->println("Select init position:");
             terminal_bar_init(min, max, max);
             while (terminal_bar_escaped() == false) {
@@ -56,7 +56,7 @@ TERMINAL_COMMAND(calibrate_ui,
             }
             //Calibrate
             servos_enable(i, false);
-            uint8_t code = servos_calibrate(i, min, init, max, servos_is_reversed(i));
+            uint8_t code = servos_calibrate(i, min,init, max, servos_is_reversed(i));
             if (code == 0) {
                 terminal_io()->println("OK");
             } else {
@@ -113,9 +113,9 @@ TERMINAL_COMMAND(calibrate,
         uint8_t i = servos_index(argv[0]);
         uint16_t min = atoi(argv[1]);
         uint16_t max = atoi(argv[2]);
-        uint16_t init = atoi(argv[3]);
+        uint16_t init = atoi(argv[4]);
         if (i != (uint8_t)-1) {
-            uint8_t code = servos_calibrate(i, min, init, max, false);
+            uint8_t code = servos_calibrate(i, min,init, max, false);
             if (code == 0) {
                 terminal_io()->println("OK");
             } else {

@@ -62,6 +62,7 @@ uint8_t servos_count();
 uint8_t servos_get_pin(uint8_t index);
 uint16_t servos_get_min(uint8_t index);
 uint16_t servos_get_init(uint8_t index);
+uint16_t servos_get_zero(uint8_t index);
 uint16_t servos_get_max(uint8_t index);
 uint16_t servos_get_pos(uint8_t index);
 bool servos_is_reversed(uint8_t index);
@@ -79,7 +80,7 @@ float servos_get_command(uint8_t index);
  * @return 0 on success, 1 if error
  */
 uint8_t servos_calibrate(uint8_t index, 
-    uint16_t min, uint16_t init, uint16_t max, bool reversed = false);
+    uint16_t min,uint16_t init, uint16_t max, bool reversed = false);
 
 /**
  * Set servo position
