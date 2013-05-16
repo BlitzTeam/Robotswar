@@ -89,6 +89,11 @@ void move_go()
 	currentMove[AVG1] = &move[AVG1];
 	currentMove[AVD2] = &move[AVD2];
 	currentMove[AVG2] = &move[AVG2];
+
+	currentMove[ARD0] = &move[ARD0];
+	currentMove[ARG1] = &move[ARG1];
+	currentMove[ARD1] = &move[ARD1];
+	currentMove[ARG0] = &move[ARG0];
 }
 
 void move_sinus(uint8_t index)
