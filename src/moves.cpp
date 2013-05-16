@@ -47,6 +47,25 @@ void move_init()
 	splineSinus.addPoint(150.0*SPLINE_SINUS_TEMPO,-60);
 	splineSinus.addPoint(200.0*SPLINE_SINUS_TEMPO,0.0);
 
+	move[ARG0].addPoint(0.0*SPLINE_TEMPO,12);
+	move[ARG0].addPoint(50.0*SPLINE_TEMPO,-20);
+	move[ARG0].addPoint(100.0*SPLINE_TEMPO,12);
+
+	move[ARG1].addPoint(0.0*SPLINE_TEMPO,-72);
+	move[ARG1].addPoint(50.0*SPLINE_TEMPO,0);
+	move[ARG1].addPoint(100.0*SPLINE_TEMPO,-72);
+
+
+	move[ARD0].addPoint(0.0*SPLINE_TEMPO,20);
+	move[ARD0].addPoint(50.0*SPLINE_TEMPO,-5);
+	move[ARD0].addPoint(100.0*SPLINE_TEMPO,20);
+
+
+	move[ARD1].addPoint(0.0*SPLINE_TEMPO,54);
+	move[ARD1].addPoint(50.0*SPLINE_TEMPO,-10);
+	move[ARD1].addPoint(100.0*SPLINE_TEMPO,54);
+
+
 	move[AVD1].addPoint(0.0*SPLINE_TEMPO,2);
 	move[AVD1].addPoint(50.0*SPLINE_TEMPO,38);
 	move[AVD1].addPoint(100.0*SPLINE_TEMPO,2);
