@@ -1,14 +1,38 @@
 #include "Leg.h"
 #include <cmath>
 
-Leg::Leg()
+Leg::Leg(LegType type, uint8_t* servos) : type(type)
 {
+	servo_count = type == FRONT ? 3 : 2;
+}
 
+Leg::~Leg()
+{
+	delete servos;
+}
+
+void Leg::scheduleMotions()
+{
+	// TODO
 }
 
 void Leg::update()
 {
-		
+	timer.tick();
+	
+	if (motions[currentMotion].isDone())
+	{
+		currentMotion = (currentMotion + 1) % LEG_MOTION_COUNT;
+		motions[currentMotion].start();
+	}
+	float* positions = motions[currentMotion].getCurrentPosition();
+	float* angles = positionToAngle(positions[0],positions[1],positions[2]);
+	
+	for (int i = 0; i < servo_count; i++)
+		servos_command(servos[i], angles[i]);
+	
+	delete angles;
+	delete positions;
 }
 
 float* Leg::positionToAngle(float x, float y, float z)

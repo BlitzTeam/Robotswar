@@ -4,12 +4,16 @@
 class Timer
 {
 	private:
-		long startTime;
+		long elapsedTime;
 		long duration;
 
 	public:
 		Timer(long duration);
-		long elapsedTime();
+		void start();
+		void tick();
+		void setDuration(long duration);
+		long getElapsedTime();
+		float completionRate();
 		bool isDone();
 };
 
