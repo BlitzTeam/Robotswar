@@ -120,9 +120,20 @@ TERMINAL_COMMAND(stopmove, "Stops all the moves")
 
 TERMINAL_COMMAND(testGo, "Test the move of the death/deads")
 {
-	move_go();
+	brasse();
+	//move_go();
 }
 
+
+TERMINAL_COMMAND(slow, "Decrease speed")
+{
+	changeSpeed(0.1);
+}
+
+TERMINAL_COMMAND(fast, "Increase speed")
+{
+	changeSpeed(-0.1);
+}
 
 /**
  * Function called @50Hz

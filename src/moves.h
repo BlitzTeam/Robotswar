@@ -23,7 +23,6 @@
 
 #define SPLINE_TEMPO (0.5)
 
-
 extern char * servosNames[SERVOS_MAX_NB];
 
 extern Spline * currentMove[SERVOS_MAX_NB]; // declare in moves.c
@@ -36,9 +35,11 @@ void pompes_avant();
 void wave_droit();
 void wave_gauche();
 void twist();
+void changeSpeed(float delta);
 
 void move_init();
 void move_sinus(uint8_t index);
 void move_stop();
 void move_go();
+void brasse();
  #endif

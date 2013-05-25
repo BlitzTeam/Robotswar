@@ -7,11 +7,15 @@ Spline * currentMove[SERVOS_MAX_NB]; // exported in moves.h
 char * servosNames[SERVOS_MAX_NB]; //exported in move.h
 
 static Spline splineSinus;
-static Spline  move[SERVOS_MAX_NB];
+static Spline move[SERVOS_MAX_NB];
+static Spline moveBrasse[SERVOS_MAX_NB];
 static Spline moveAV1;
+
+float speed = 1 ;
 
 void move_init()
 {
+
 	servos_register(11,"ARG0");
 	servos_register(3,"ARG1");
 	servos_register(5,"ARD0");
@@ -81,6 +85,55 @@ void move_init()
 	move[AVD2].addPoint(0.0*SPLINE_TEMPO,-18);
 	move[AVD2].addPoint(50.0*SPLINE_TEMPO,48);
 	move[AVD2].addPoint(100.0*SPLINE_TEMPO,-18);
+
+
+
+	/*DECLARATION MOVE BRASSE */
+	/*------------------------*/
+
+	moveBrasse[AVD0].addPoint(0.0*speed,27);
+	moveBrasse[AVD0].addPoint(25.0*speed,-63);
+	moveBrasse[AVD0].addPoint(50.0*speed,-63);
+	moveBrasse[AVD0].addPoint(100.0*speed,27);
+
+	moveBrasse[CALE].addPoint(0.0*speed,0);
+	moveBrasse[CALE].addPoint(25.0*speed,0);
+	moveBrasse[CALE].addPoint(30.0*speed,45);
+	moveBrasse[CALE].addPoint(75.0*speed,45);
+	moveBrasse[CALE].addPoint(100.0*speed,45);
+
+	moveBrasse[AVG0].addPoint(0.0*speed,-42);
+	moveBrasse[AVG0].addPoint(25.0*speed,54);
+	moveBrasse[AVG0].addPoint(50.0*speed,54);
+	moveBrasse[AVG0].addPoint(100.0*speed,-42);
+
+	moveBrasse[ARD0].addPoint(0.0*speed,-12);
+	moveBrasse[ARD0].addPoint(25.0*speed,-12);
+	moveBrasse[ARD0].addPoint(50.0*speed,-12);
+	moveBrasse[ARD0].addPoint(100.0*speed,-12);
+
+	moveBrasse[AVD2].addPoint(0.0*speed,-15);
+	moveBrasse[AVD2].addPoint(25.0*speed,-15);
+	moveBrasse[AVD2].addPoint(30.0*speed,51);
+	moveBrasse[AVD2].addPoint(75.0*speed,51);
+	moveBrasse[AVD2].addPoint(100.0*speed,-15);
+
+	moveBrasse[AVD1].addPoint(0.0*speed,15);
+	moveBrasse[AVD1].addPoint(25.0*speed,15);
+	moveBrasse[AVD1].addPoint(30.0*speed,0);
+	moveBrasse[AVD1].addPoint(75.0*speed,0);
+	moveBrasse[AVD1].addPoint(100.0*speed,15);
+
+	moveBrasse[AVG2].addPoint(0.0*speed,28);
+	moveBrasse[AVG2].addPoint(25.0*speed,28);
+	moveBrasse[AVG2].addPoint(30.0*speed,-53);
+	moveBrasse[AVG2].addPoint(75.0*speed,-53);
+	moveBrasse[AVG2].addPoint(100.0*speed,28);
+
+
+
+	/*END OF DECLARATION*/
+	/*------------------------*/
 }
 
 void move_go()
@@ -94,6 +147,26 @@ void move_go()
 	currentMove[ARG1] = &move[ARG1];
 	currentMove[ARD1] = &move[ARD1];
 	currentMove[ARG0] = &move[ARG0];
+}
+
+void changeSpeed(float delta)
+{
+	speed += delta;
+	move_stop();
+	move_init();
+	brasse();
+}
+
+void brasse()
+{
+	currentMove[AVD0] = &moveBrasse[AVD0];
+	currentMove[CALE] = &moveBrasse[CALE];
+	currentMove[AVG0] = &moveBrasse[AVG0];
+	currentMove[ARD0] = &moveBrasse[ARD0];
+
+	currentMove[AVD2] = &moveBrasse[AVD2];
+	currentMove[AVG2] = &moveBrasse[AVG2];
+	currentMove[AVD1] = &moveBrasse[AVD1];
 }
 
 void move_sinus(uint8_t index)
