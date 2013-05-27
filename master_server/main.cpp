@@ -10,7 +10,7 @@
 #define EYE2 7
 
 
-#define AMPLITUDE 30
+#define AMPLITUDE 40
 
 Spline s1;
 Spline s2;
@@ -67,24 +67,6 @@ TERMINAL_COMMAND(attack, "Do an attack")
         attack = true;
     } else {
         attack = false;
-    }
-}
-
-TERMINAL_COMMAND(eye1, "Enable/Disable the eyes")
-{
-    if (argc && atoi(argv[0])) {
-        digitalWrite(EYE1, HIGH);
-    } else {
-        digitalWrite(EYE1, LOW);
-    }
-}
-
-TERMINAL_COMMAND(eye2, "Enable/Disable the eyes")
-{
-    if (argc && atoi(argv[0])) {
-        digitalWrite(EYE2, HIGH);
-    } else {
-        digitalWrite(EYE2, LOW);
     }
 }
 
@@ -239,18 +221,6 @@ void scheduleMove()
         att2 = 20;
     }
 
-/*
-	servos_command(SERVO_BR1, 30);
-	servos_command(SERVO_BR2, 30);
-	servos_command(SERVO_BL1, 30);
-	servos_command(SERVO_BL2, 30);
-	
-	servos_command(SERVO_FR1, 30);
-	servos_command(SERVO_FR2, 30);
-	servos_command(SERVO_FL1, 30);
-	servos_command(SERVO_FL2, 30);
-
-
     servos_command(SERVO_FR1, att2+frontOffset+rightOffset+s*s1.getMod(t)*altitudeGain*AMPLITUDE*amplitudeGain);
     servos_command(SERVO_BL1, backOffset+leftOffset+s*s1.getMod(t+phase)*altitudeGain*AMPLITUDE*amplitudeGain);
     servos_command(SERVO_BR1, backOffset+rightOffset+s*s1.getMod(t+2*phase)*altitudeGain*AMPLITUDE*amplitudeGain);
@@ -260,7 +230,7 @@ void scheduleMove()
     servos_command(SERVO_BL2, backOOffset+leftGain*s2.getMod(t+phase)*AMPLITUDE*amplitudeGain-open);
     servos_command(SERVO_BR2, backOOffset+rightGain*s2.getMod(t+2*phase)*AMPLITUDE*amplitudeGain-open);
     servos_command(SERVO_FL2, frontOOffset+leftGain*s2.getMod(t+3*phase)*AMPLITUDE*amplitudeGain+open);
-*/
+
 }
 
 void setup()
