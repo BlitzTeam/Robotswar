@@ -80,7 +80,7 @@ float servos_get_command(uint8_t index);
  * @return 0 on success, 1 if error
  */
 uint8_t servos_calibrate(uint8_t index, 
-    uint16_t min,uint16_t init, uint16_t max, bool reversed = false);
+    uint16_t min,uint16_t init, uint16_t max, bool reversed = false, uint16_t zero = 0);
 
 /**
  * Set servo position

@@ -179,8 +179,7 @@ float servos_get_command(uint8_t index)
     }
 }
 
-uint8_t servos_calibrate(uint8_t index,
-    uint16_t min,uint16_t init, uint16_t max, bool reversed)
+uint8_t servos_calibrate(uint8_t index, uint16_t min,uint16_t init, uint16_t max, bool reversed, uint16_t zero)
 {
     if (
         index == -1 || index >= Servos_count || max <= min || 
@@ -188,11 +187,13 @@ uint8_t servos_calibrate(uint8_t index,
     ) {
         return 1;
     }
+    if (zero == 0)
+    	zero = init;
 
     Servos[index].min = min;
     Servos[index].max = max;
     Servos[index].init = init;
-    Servos[index].zero = init;
+    Servos[index].zero = zero;
     Servos[index].pos = init;
     Servos[index].reversed = reversed;
     servos_set_pos(index, Servos[index].pos);
@@ -231,7 +232,7 @@ void servos_command(uint8_t index, float pos)
             pos = old_pos - Servos_smooth;
         }
     }
-
+    
     if (Servos[index].reversed) {
         pos *= -1;
     }

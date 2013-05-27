@@ -39,7 +39,7 @@ class TerminalIO : public Print
 /**
  * The number of terminal bar step
  */
-#define TERMINAL_BAR_STEP 50
+#define TERMINAL_BAR_STEP 200
 
 /**
  * Terminal prompt
