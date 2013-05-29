@@ -11,12 +11,13 @@
 
 
 #define AMPLITUDE 40
+#define DIR_AMPLITUDE 20
 
 Spline s1;
 Spline s2;
 
 volatile bool isUSB = false;
-volatile bool move = true;
+volatile bool move = false;
 volatile double t = 0.0;
 volatile double leftGain = 1.0;
 volatile double rightGain = 1.0;
@@ -35,6 +36,12 @@ volatile double open = 0.0;
 volatile double phase = 0.25;
 volatile double frontOOffset = 0.0;
 volatile double backOOffset = 0.0;
+volatile double direction = 0.0;
+volatile bool bipod = false;
+volatile double phaseFR = 0.0f;
+volatile double phaseFL = 3.0f;
+volatile double phaseBR = 2.0f;
+volatile double phaseBL = 1.0f;
 
 TERMINAL_COMMAND(fbooffset, "Front/Back offsets")
 {
@@ -150,7 +157,7 @@ TERMINAL_COMMAND(dir, "Direction")
     if (argc) {
         g = atof(argv[0]);
         terminal_io()->println("Fixed direction");
-
+		direction = g;
         if (g > 0) {
             leftGain = 1.0 - g;
             rightGain = 1.0;
@@ -177,6 +184,29 @@ TERMINAL_COMMAND(balance, "Balance")
             backBalance = 1.0;
             frontBalance = 1.0 - g;
         }
+    }
+}
+
+TERMINAL_COMMAND(gait, "Toggle gait")
+{
+	terminal_io()->println("Toggling gait");
+
+	bipod = !bipod;
+	if (bipod)
+    {
+    	phase = 0.5f;
+        phaseFR = 0.0f;
+        phaseFL = 1.0f;
+        phaseBR = 1.0f;
+        phaseBL = 0.0f;
+    }
+    else
+    {
+    	phase = 0.25f;
+    	phaseFR = 0.0f;
+        phaseFL = 3.0f;
+        phaseBR = 2.0f;
+        phaseBL = 1.0f;
     }
 }
 
@@ -221,15 +251,19 @@ void scheduleMove()
         att2 = 20;
     }
 
-    servos_command(SERVO_FR1, att2+frontOffset+rightOffset+s*s1.getMod(t)*altitudeGain*AMPLITUDE*amplitudeGain);
-    servos_command(SERVO_BL1, backOffset+leftOffset+s*s1.getMod(t+phase)*altitudeGain*AMPLITUDE*amplitudeGain);
-    servos_command(SERVO_BR1, backOffset+rightOffset+s*s1.getMod(t+2*phase)*altitudeGain*AMPLITUDE*amplitudeGain);
-    servos_command(SERVO_FL1, frontOffset+leftOffset+s*s1.getMod(t+3*phase)*altitudeGain*AMPLITUDE*amplitudeGain);
+    servos_command(SERVO_FR1, att2+frontOffset+rightOffset+s*s1.getMod(t + phaseFR * phase)*altitudeGain*AMPLITUDE*amplitudeGain);
+    servos_command(SERVO_BL1, backOffset+leftOffset+s*s1.getMod(t + phaseBL * phase)*altitudeGain*AMPLITUDE*amplitudeGain);
+    servos_command(SERVO_BR1, backOffset+rightOffset+s*s1.getMod(t + phaseBR * phase)*altitudeGain*AMPLITUDE*amplitudeGain);
+    servos_command(SERVO_FL1, frontOffset+leftOffset+s*s1.getMod(t + phaseFL * phase)*altitudeGain*AMPLITUDE*amplitudeGain);
 
-    servos_command(SERVO_FR2, att+frontOOffset+rightGain*s2.getMod(t)*AMPLITUDE*amplitudeGain+open);
-    servos_command(SERVO_BL2, backOOffset+leftGain*s2.getMod(t+phase)*AMPLITUDE*amplitudeGain-open);
-    servos_command(SERVO_BR2, backOOffset+rightGain*s2.getMod(t+2*phase)*AMPLITUDE*amplitudeGain-open);
-    servos_command(SERVO_FL2, frontOOffset+leftGain*s2.getMod(t+3*phase)*AMPLITUDE*amplitudeGain+open);
+    servos_command(SERVO_FR2, att+frontOOffset+rightGain*s2.getMod(t + phaseFR * phase)*AMPLITUDE*amplitudeGain+open);
+    servos_command(SERVO_BL2, backOOffset+leftGain*s2.getMod(t + phaseBL * phase)*AMPLITUDE*amplitudeGain-open);
+    servos_command(SERVO_BR2, backOOffset+rightGain*s2.getMod(t + phaseBR * phase)*AMPLITUDE*amplitudeGain-open);
+    servos_command(SERVO_FL2, frontOOffset+leftGain*s2.getMod(t + phaseFL * phase)*AMPLITUDE*amplitudeGain+open);
+    
+    // direction
+    servos_command(SERVO_FL0, direction * DIR_AMPLITUDE);
+    servos_command(SERVO_FR0, direction * DIR_AMPLITUDE);
 
 }
 
@@ -237,22 +271,10 @@ void setup()
 {
     pinMode(6, OUTPUT);
     pinMode(BOARD_LED_PIN, OUTPUT);
-    pinMode(EYE1, OUTPUT);
-    pinMode(EYE2, OUTPUT);
+    
     servos_init();
 
     servos_register_all();
-    
-    servos_enable_all();
-    
-    servos_enable(SERVO_BR1);
-    servos_enable(SERVO_BR2);
-    servos_enable(SERVO_BL1);
-    servos_enable(SERVO_BL2);
-    servos_enable(SERVO_FR1);
-    servos_enable(SERVO_FR2);
-    servos_enable(SERVO_FL1);
-    servos_enable(SERVO_FL2);
     
     // Begining on WiFly Mode
     Serial3.begin(921600);
